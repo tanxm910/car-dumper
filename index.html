@@ -91,6 +91,7 @@
     #app[data-view="yard"] .label.small,
     #app[data-view="dumper"] .label:not(.l-dumper),
     #app[data-view="positioner"] .label:not(.l-pos),
+    #app[data-view="uncoupler"] .label:not(.l-uncoupler),
     #app[data-view="table"] .label:not(.l-table, .l-pusher),
     #app[data-view="heavy-grip"] .label:not(.l-grip),
     #app[data-view="empty-grip"] .label:not(.l-grip),
@@ -137,6 +138,7 @@
   "three/addons/": "./vendor/addons/"
 } }
 </script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M48 15a24 24 0 1 0 0 34' fill='none' stroke='%23eeb259' stroke-width='10'/%3E%3C/svg%3E">
 </head>
 <body>
 <div id="info" class="panel">
@@ -146,6 +148,7 @@
     <div class="sub">翻车机 · 拨车机 · 迁车台 · 推车机<br>地下皮带 · 堆取料机 · 配煤仓</div>
     <div class="row" id="st-dumper"><span class="sw" style="background:#3f6fa8"></span><span class="name">翻车机</span><span class="state">空车待推出</span><span class="dot"></span></div>
     <div class="row" id="st-positioner"><span class="sw" style="background:#e0ac1f"></span><span class="name">拨车机</span><span class="state">待命</span><span class="dot"></span></div>
+    <div class="row" id="st-uncoupler"><span class="sw" style="background:#e0ac1f"></span><span class="name">脱钩臂</span><span class="state">已退回</span><span class="dot"></span></div>
     <div class="row" id="st-table"><span class="sw" style="background:#d26f1d"></span><span class="name">迁车台</span><span class="state">已对准重车线，待接车</span><span class="dot"></span></div>
     <div class="row" id="st-table-grip"><span class="sw" style="background:#deb55b"></span><span class="name">台上夹轮</span><span class="state">已松开，等待接车</span><span class="dot"></span></div>
     <div class="row" id="st-pusher"><span class="sw" style="background:#3f9e5a"></span><span class="name">推车机</span><span class="state">待命</span><span class="dot"></span></div>
@@ -159,11 +162,11 @@
       <summary>工艺流程说明</summary>
       <ol>
         <li>重车列停在距翻车机入口约一个车皮长度处，重车夹轮器夹住首车轮组。拨车机落臂连挂首节重车后，夹轮器松开。</li>
-        <li>拨车机牵引整列重车前移一个车位，钩头空车侧车钩同时顶住翻车机内已卸空的车向前推。随后夹轮器夹紧后续重车，首节摘钩。</li>
+        <li>拨车机牵引整列重车前移一个车位，钩头空车侧车钩同时顶住翻车机内已卸空的车向前推。后续重车夹紧后，对侧机械手伸出、抓钩、提钩并退回，完成首节解列。</li>
         <li>拨车机单独把首节重车牵入翻车机，到位后重车侧车钩脱开；继续推着空车送上迁车台。空车到位后，台上夹轮器先夹紧，拨车机再脱钩、抬臂并返回原位落臂等待。大臂从 C 型端环开口穿过翻车机。</li>
         <li>翻车机压紧重车，待拨车机退出后翻转约 165° 卸煤，再回零位。</li>
-        <li>重车线止挡器升起，迁车台夹住台上空车横移至空车线。对准后，台上夹轮器及空车线夹轮器松开、止挡器落下，推车机再把空车推出迁车台并多推一个车位。</li>
-        <li>推车到位后，空车夹轮器夹住新的首节空车，推车机再返回。空车线止挡器升起，迁车台返回重车线，进入下一循环。</li>
+        <li>迁车台拔销后夹住台上空车横移至空车线，对轨插销后松开台上及空车线夹轮器。止挡器为被动机械联动：对准哪条线，该线止挡落下，离开则抬起。</li>
+        <li>推车机推送空车；末轮完整越过空车止挡且推头让开后，迁车台立即拔销返回，与剩余推送并行。空车固定在线路上；推车完成后夹紧空车列，推车机独立返回。迁车台回到重车线插销锁定后即可待接下一车。</li>
         <li>堆料时，翻车机来煤经 B02 和转运站进入 B03。固定尾车抬升带面，煤经悬臂皮带送至 A 煤堆。</li>
         <li>取料时，翻车机停在待命位。斗轮取煤后，煤经悬臂和中心漏斗落到 B03，沿堆料时的方向送至末端。B04A 抬升煤流，B04B 沿 A 煤堆外侧送回 B02，最后经转运站和 B06 入仓。</li>
         <li>直通时，翻车机来煤由 B02 经转运站直接落上 B06，料场皮带和堆取料机待命。</li>
@@ -193,6 +196,7 @@
       <a class="detail-link" href="./dumper-detail.html">本体详解 <span aria-hidden="true">→</span></a>
       <a class="detail-link operation-link" href="./dumper-operation.html">前往仿真操作 <span aria-hidden="true">→</span></a>
       <button type="button" data-view="positioner">拨车机</button>
+      <button type="button" data-view="uncoupler">脱钩机械手</button>
       <button type="button" data-view="heavy-grip">重车夹轮</button>
       <button type="button" data-view="empty-grip">空车夹轮</button>
       <button type="button" data-view="table">迁车台 / 推车机</button>
@@ -464,24 +468,41 @@ addTrack({ x1: TT_X - 23, x2: TT_X + 18, z: PUSH_Z, gauge: .6 });          // �
 // 迁车台横移轨道（坑底）
 for (const x of [TT_X - 5, TT_X + 5]) box(.14, .15, PIT2.z2 - PIT2.z1 - .3, M.rail, x, PIT2.depth + .075, (PIT2.z1 + PIT2.z2) / 2);
 // 止挡器：重车线、空车线靠近迁车台处各一套。迁车台未对准时升起，对准哪条线就落下哪条线的止挡器
-const STOP_UP = 0, STOP_DOWN = -.5;
 function makeStop(z, name) {
   const g = new THREE.Group(); g.position.set(PIT2.x1 - 1.2, 0, z); scene.add(g);
-  box(.9, .2, 2.3, M.dark, 0, .12, 0, g);                                   // 基座
-  for (const s of [-1, 1]) box(.7, .5, .6, M.dumperDark, 0, .4, s * 1.45, g);   // 两侧液压缸箱
-  const blk = new THREE.Group(); g.add(blk);
+  box(.9, .12, 2.3, M.dark, 0, .02, 0, g);
+  // Passive hinged blocks, cross shaft, counterweight and a mechanical follower.
+  const shaft=cyl(.085,2.1,M.steel,12);shaft.rotation.x=Math.PI/2;shaft.position.y=.04;g.add(shaft);
+  for(const side of [-1,1])box(.45,.22,.35,M.steel,0,.04,side*1.02,g);
+  const blk = new THREE.Group();blk.position.y=.04;g.add(blk);
   const red = std(0xc8312b, .6, .2);
-  for (const s of [-1, 1]) box(.5, .5, .26, red, 0, RT + .25, s * (GAUGE - .28), blk);
-  box(.3, .14, .9, M.yellow, 0, RT + .43, 0, blk);
-  addLabel(name, 'small l-misc', g, 0, 1.6, 0);
+  for(const side of [-1,1]){box(.5,.6,.24,red,0,.50,side*GAUGE,blk);box(.5,.06,.26,M.yellow,0,.82,side*GAUGE,blk);}
+  box(.15,.09,1.7,M.steel,0,.14,0,blk);
+  box(.8,.10,.12,M.steel,-.35,-.11,1.02,blk);
+  box(.32,.27,.28,M.steel,-.64,-.11,1.02,blk);
+  const link=box(1.3,.07,.07,M.steel,.85,.15,1.12,g);
+  const follower=cyl(.13,.13,M.yellow,12);follower.rotation.x=Math.PI/2;follower.position.set(1.55,.15,1.12);g.add(follower);
+  blk.userData.linkage={link,follower};
+  addLabel(name+' · 机械联动','small l-misc',g,0,1.6,0);
   return blk;
 }
 const stops = { heavy: makeStop(0, '重车线止挡器'), empty: makeStop(EMPTY_Z, '空车线止挡器') };
-stops.empty.position.y = STOP_UP;
-stops.heavy.position.y = STOP_DOWN;    // 初始迁车台对准重车线
-function moveStop(key, up) {
-  const blk = stops[key], y0 = blk.position.y, y1 = up ? STOP_UP : STOP_DOWN;
-  return tween(.8, p => blk.position.y = lerp(y0, y1, p));
+stops.empty.rotation.z=0;
+stops.heavy.rotation.z=-Math.PI/2;
+function animateStop(block,tableOffset){
+  // The table's cam depresses the passive lever over its final approach.
+  // Deriving every pose from travel also keeps mid-stroke stops and reversals continuous.
+  const raised=THREE.MathUtils.smootherstep(Math.abs(tableOffset),0,1.2),lowered=1-raised;
+  block.rotation.z=-Math.PI/2*lowered;
+  const {link,follower}=block.userData.linkage;
+  link.rotation.z=-Math.atan(.10/1.3)*lowered;
+  link.position.y=.15-.05*lowered;
+  follower.position.y=.15-.10*lowered;
+}
+
+function syncMechanicalStops() {
+  animateStop(stops.heavy,tt.position.z);
+  animateStop(stops.empty,tt.position.z-EMPTY_Z);
 }
 
 // 夹轮器固定在首车前轮对停车位，两股钢轨各由内、外夹臂夹住车轮侧面。
@@ -802,6 +823,52 @@ const posArm = new THREE.Group();
   const pivot = cyl(.35, .7, M.steel, 16); pivot.rotation.z = Math.PI / 2; posArm.add(pivot);
   addLabel('拨车机', 'l-pos', posi, 0, 5, 0);
 }
+
+// 与操作页相同的对侧脱钩机械手。
+const uncouplerState={progress:0,active:false,complete:false};
+const uncouplerVisual=(()=>{
+  const g=new THREE.Group();g.position.x=-21;g.rotation.y=Math.PI;scene.add(g);
+  box(1.3,.24,1.5,M.dark,0,.12,3.35,g);
+  box(.65,1.1,.65,M.positioner,0,.76,3.35,g);
+  const up=new THREE.Vector3(0,1,0),joints=[];
+  for(let i=0;i<3;i++){
+    const joint=cyl(.23,.42,M.dark,16);joint.rotation.z=Math.PI/2;g.add(joint);joints.push(joint);
+  }
+  const upper=box(.32,1,.42,M.positioner,0,0,0,g),forearm=box(.25,1,.32,M.positioner,0,0,0,g);
+  const ram=cyl(.11,1,M.steel,12);g.add(ram);
+  const hand=new THREE.Group();g.add(hand);box(.55,.22,.36,M.dark,0,0,0,hand);
+  const fingers=[-1,1].map(side=>{
+    const finger=new THREE.Group();hand.add(finger);
+    box(.1,.38,.14,M.yellow,0,-.18,0,finger);box(.14,.1,.14,M.yellow,-side*.055,-.35,0,finger);
+    return {g:finger,side};
+  });
+  const material=std(0x35424a,.4,.3,{emissive:0x35424a,emissiveIntensity:.5});
+  const lamp=new THREE.Mesh(new THREE.SphereGeometry(.12,12,8),material);lamp.position.set(.4,1.5,3.35);g.add(lamp);
+  const label=addLabel('脱钩机械手 · 已退回','small l-pos l-uncoupler',g,0,3.3,2.8);
+  const from=new THREE.Vector3(),to=new THREE.Vector3(),direction=new THREE.Vector3();
+  const link=(mesh,a,b)=>{
+    direction.copy(b).sub(a);mesh.position.copy(a).add(b).multiplyScalar(.5);
+    mesh.scale.y=direction.length();mesh.quaternion.setFromUnitVectors(up,direction.normalize());
+  };
+  const smooth=(a,b,p)=>{const t=THREE.MathUtils.clamp((p-a)/(b-a),0,1);return t*t*(3-2*t);};
+  return {get base(){return g.localToWorld(new THREE.Vector3(0,0,3.35));},draw(s){
+    const u=s.uncoupler,p=u.progress,reach=smooth(0,.38,p)*(1-smooth(.74,1,p));
+    const lift=.4*smooth(.48,.62,p)*(1-smooth(.68,.82,p));
+    const grip=smooth(.35,.46,p)*(1-smooth(.7,.8,p));
+    joints[0].position.set(0,1.3,3.35);
+    joints[1].position.set(0,lerp(2.65,1.9,reach)+lift*.5,lerp(2.6,1.65,reach));
+    joints[2].position.set(0,RT+1.35+lift,lerp(2.7,0,reach));
+    link(upper,joints[0].position,joints[1].position);link(forearm,joints[1].position,joints[2].position);
+    from.set(.27,.85,3.35);to.copy(joints[1].position);to.x=.27;link(ram,from,to);
+    hand.position.copy(joints[2].position);for(const f of fingers)f.g.position.x=f.side*lerp(.31,.15,grip);
+    const color=u.active?0xf1af43:u.complete?0x69df93:0x35424a;
+    material.color.setHex(color);material.emissive.copy(material.color);
+    const phase=p<.35?'伸手':p<.48?'抓钩':p<.7?'提钩':'退回';
+    label.element.textContent='脱钩机械手 · '+(u.active?phase:u.complete?'脱钩完成':'已退回');
+    setStatus('uncoupler',u.active?phase+'中':u.complete?'脱钩完成，机械手已退回':'已退回',u.active||u.complete);
+  }};
+})();
+uncouplerVisual.draw({uncoupler:uncouplerState});
 
 // ================= 推车机 =================
 const pusher = new THREE.Group();
@@ -1874,6 +1941,8 @@ const ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 const linear = t => t;
 const tweens = new Set(), waiters = new Set();
 let simTime = 0;
+const overviewEvents=[];
+function flowEvent(kind,cycle){overviewEvents.push({time:simTime,kind,cycle});if(overviewEvents.length>240)overviewEvents.shift();}
 function tween(dur, fn, e = ease) { return new Promise(res => tweens.add({ t: 0, dur, fn, e, res })); }
 const wait = s => tween(s, () => {}, linear);
 const until = cond => cond() ? Promise.resolve() : new Promise(res => waiters.add({ cond, res }));
@@ -1886,6 +1955,7 @@ function stepSim(dt) {
     if (p >= 1) { tweens.delete(tw); tw.res(); }
   }
   for (const w of [...waiters]) if (w.cond()) { waiters.delete(w); w.res(); }
+  syncMechanicalStops();
   updateParticles(dt);
   yard.update(dt, !unloadCycleActive && dumperIdle && tableReady);
 }
@@ -1903,6 +1973,7 @@ const empties = [];  // 空车列，empties[0] 离迁车台最近
 let dumperCar = getWagon(0, 0, false);   // 翻车机内为上一循环已卸空的车
 let dumperIdle = true;
 let tableReady = true;
+let tablePin = 1, tableMoving = false, tableCar = null, pusherReady = true, pusherStage = 'idle', cycleNumber = 0;
 let unloadCycleActive = false;
 let dumpCount = 0;
 for (let i = 0; i < 8; i++) loaded.push(getWagon(LOADED_FRONT - i * PITCH, 0, true));
@@ -1926,6 +1997,8 @@ async function mainLoop() {
     // 等当前车循环结束再闭锁进车，取料期间保持翻车机系统在待命位。
     do { await until(canStartUnload); } while (!canStartUnload());
     unloadCycleActive = true;
+    const cycle=++cycleNumber;
+    uncouplerState.complete=false;uncouplerVisual.draw({uncoupler:uncouplerState});
     const out = dumperCar, car = loaded[0];
 
     setStatus('positioner', '重车侧车钩连挂首节重车');
@@ -1945,11 +2018,12 @@ async function mainLoop() {
     });
     setStatus('positioner', '停车，夹轮器夹紧后续重车，首节摘钩');
     await moveWheelGripper('heavy', true);
-    await wait(.7);  // 先夹住后一车，再摘开首车车钩
+    await uncoupleTrain(cycle);  // 先夹紧后续重车，机械手退回后才可单节入机
     loaded.shift();
     // 补充一节重车到列尾（循环利用离场的空车）
     loaded.push(getWagon(loaded[loaded.length - 1].g.position.x - PITCH, 0, true));
 
+    flowEvent('feed-start',cycle);
     setStatus('positioner', '单独牵引首节重车进入翻车机');
     await movePositioner(5, posi.position.x + PITCH, () => { car.g.position.x = headRear() - PITCH / 2; pushOut(); });
     setStatus('positioner', '重车到位，重车侧车钩脱开');
@@ -1961,6 +2035,7 @@ async function mainLoop() {
     if (out) {
       setStatus('positioner', '继续推送空车至迁车台');
       await movePositioner(3, TT_X - PITCH / 2 - HEAD_LEN / 2 - POS_ARM_X, () => out.g.position.x = headFront() + PITCH / 2);
+      tableCar=out;
       setStatus('positioner', '空车到位，等待迁车台夹轮器夹紧');
       await moveWheelGripper('table', true);
       setStatus('positioner', '台上空车已夹紧，空车侧车钩脱开');
@@ -1968,7 +2043,7 @@ async function mainLoop() {
     }
     setStatus('positioner', '抬臂');
     await tween(1, p => posArm.rotation.x = p * POS_ARM_TRAVEL_ANGLE);
-    if (out) transferCycle(out);
+    if (out) transferCycle(out,cycle);
     setStatus('positioner', '空载返回原位');
     await movePositioner(out ? 7 : 5, POS_HOME);
     setStatus('positioner', '回到原位，落臂');
@@ -2012,58 +2087,103 @@ async function dumpCycle(w) {
   dumperIdle = true;
 }
 
-// ---- 迁车台 + 推车机
-async function transferCycle(w) {
-  tableReady = false;
-  setStatus('table', '重车线止挡器升起');
-  await moveStop('heavy', true);
-  setStatus('table', '载空车横移至空车线');
-  await tween(3.5, p => { tt.position.z = EMPTY_Z * p; w.g.position.z = EMPTY_Z * p; });
-  setStatus('table', '对准空车线，台上及空车线夹轮器松开、止挡器落下');
-  await Promise.all([moveStop('empty', false), moveWheelGripper('table', false), moveWheelGripper('empty', false)]);
-  setStatus('table', '等待推车');
+// ---- 对侧机械手：后续车列夹紧后，提钩并退回才允许单节入机。
+async function uncoupleTrain(cycle) {
+  if(!wheelGrippers.heavy.closed)throw new Error('后续重车未夹紧，不能操作机械手');
+  Object.assign(uncouplerState,{progress:0,active:true,complete:false});
+  flowEvent('uncoupler-start',cycle);
+  setStatus('positioner','后续重车已夹紧，等待机械手脱钩并退回');
+  await tween(2.4,p=>{uncouplerState.progress=p;uncouplerVisual.draw({uncoupler:uncouplerState});},linear);
+  Object.assign(uncouplerState,{progress:0,active:false,complete:true});
+  uncouplerVisual.draw({uncoupler:uncouplerState});
+  flowEvent('uncoupler-complete',cycle);
+}
 
-  setStatus('pusher', '前进至车端');
-  let px = pusher.position.x;
-  const approach = TT_X + PITCH / 2 - PUSH_ARM_X + .6;
-  await tween(2.2, p => pusher.position.x = lerp(px, approach, p));
+// ---- 迁车台 + 推车机：按轮对过挡交接车辆，两台设备各自完成动作。
+async function moveTablePin(locked,cycle,phase) {
+  const from=tablePin;
+  flowEvent('table-'+phase+(locked?'-lock-start':'-unpin-start'),cycle);
+  await tween(.8,p=>tablePin=lerp(from,locked?1:0,p),linear);
+  tablePin=locked?1:0;
+  flowEvent('table-'+phase+(locked?'-locked':'-unpinned'),cycle);
+}
+function emptyWagonPastStop(w) {
+  return Math.abs(w.g.position.z-EMPTY_Z)<.005&&
+    w.g.position.x+BOGIE_X+AXLE_OFFSET+WHEEL_RADIUS<=PIT2.x1-1.2-.25-.02+1e-8;
+}
+function pushHeadClearOfTable() {
+  return pusher.position.x+PUSH_ARM_X+.18<=TT_X-7.3-.02;
+}
+function pusherCanReturn() {
+  return Math.abs(tt.position.z-EMPTY_Z)<.005&&!tableMoving||tt.position.z-2.1>PUSH_Z+4.6+.02;
+}
+async function transferCycle(w,cycle) {
+  tableReady=false;
+  await until(()=>pusherReady);
+  pusherReady=false;pusherStage='waiting';
+  setStatus('pusher','等待迁车台对轨',false);
+  setStatus('table','台上空车已固定，拔销准备迁出');
+  await moveTablePin(false,cycle,'depart');
+  setStatus('table','载空车横移至空车线，止挡机械联动');
+  tableMoving=true;
+  await tween(3.5,p=>{tt.position.z=EMPTY_Z*p;w.g.position.z=EMPTY_Z*p;});
+  tableMoving=false;
+  setStatus('table','对准空车线，插销锁定');
+  await moveTablePin(true,cycle,'empty');
+  setStatus('table','空车线对轨，松开台上与空车列夹轮器');
+  await Promise.all([moveWheelGripper('table',false),moveWheelGripper('empty',false)]);
+  setStatus('table','等待空车末轮过挡，准备提前返台');
 
-  setStatus('pusher', '推送空车驶出迁车台，并多推一个车位');
-  px = pusher.position.x;
-  const cx0 = w.g.position.x, ex = empties.map(e => e.g.position.x);
-  await tween(7, p => {
-    pusher.position.x = px - PUSH_DIST * p;
-    w.g.position.x = Math.min(cx0, pusher.position.x + PUSH_ARM_X - PITCH / 2);
-    let front = w.g.position.x;
-    empties.forEach((e, i) => { e.g.position.x = Math.min(ex[i], front - PITCH); front = e.g.position.x; });
-  });
-  empties.unshift(w);
-  // 远端空车离开场景，回收再利用
-  while (empties.length && empties[empties.length - 1].g.position.x < TRACK_START + 8) {
-    const e = empties.pop(); e.g.visible = false; pool.push(e);
-  }
+  pusherStage='approach';setStatus('pusher','前进至车端');
+  let px=pusher.position.x;
+  const approach=TT_X+PITCH/2-PUSH_ARM_X+.6;
+  await tween(2.2,p=>pusher.position.x=lerp(px,approach,p));
 
-  setStatus('pusher', '推车到位，等待空车夹轮器夹紧首车');
-  await moveWheelGripper('empty', true);
-  setStatus('pusher', '返回原位');
-  setStatus('table', '空车线止挡器升起');
+  // Capture the old train: adding the discharged wagon must not change the active push targets.
+  const preceding=[...empties],ex=preceding.map(e=>e.g.position.x),cx0=w.g.position.x;
+  px=pusher.position.x;
   await Promise.all([
-    (async () => {
-      const x1 = pusher.position.x;
-      await tween(5, p => pusher.position.x = lerp(x1, PUSH_HOME, p));
-      setStatus('pusher', '原位待命', false);
+    (async()=>{
+      pusherStage='push';flowEvent('push-start',cycle);
+      setStatus('pusher','推送空车驶出迁车台，并多推一个车位');
+      await tween(7,p=>{
+        pusher.position.x=px-PUSH_DIST*p;
+        w.g.position.x=Math.min(cx0,pusher.position.x+PUSH_ARM_X-PITCH/2);
+        let front=w.g.position.x;
+        preceding.forEach((e,i)=>{e.g.position.x=Math.min(ex[i],front-PITCH);front=e.g.position.x;});
+      },linear);
+      flowEvent('push-complete',cycle);pusherStage='grip';
+      while(empties.length&&empties[empties.length-1].g.position.x<TRACK_START+8){
+        const e=empties.pop();e.g.visible=false;pool.push(e);
+      }
+      setStatus('pusher','推车到位，等待空车夹轮器夹紧首车');
+      await moveWheelGripper('empty',true);
+      if(!pusherCanReturn()){pusherStage='waiting-table';setStatus('pusher','等待迁车台让开推头返回路径');}
+      await until(pusherCanReturn);
+      pusherStage='return';setStatus('pusher','返回原位，与迁车台独立运行');
+      const from=pusher.position.x;
+      await tween(5,p=>pusher.position.x=lerp(from,PUSH_HOME,p));
+      pusher.position.x=PUSH_HOME;pusherReady=true;pusherStage='idle';
+      flowEvent('pusher-ready',cycle);setStatus('pusher','原位待命',false);
     })(),
-    (async () => {
-      await moveStop('empty', true);
-      setStatus('table', '空载返回重车线');
-      const z0 = tt.position.z;
-      await tween(3.5, p => tt.position.z = lerp(z0, 0, p));
-      setStatus('table', '对准重车线，重车线止挡器落下');
-      await moveStop('heavy', false);
-      setStatus('table', '已对准重车线，待接车', false);
+    (async()=>{
+      await until(()=>emptyWagonPastStop(w)&&pushHeadClearOfTable());
+      if(!empties.includes(w))empties.unshift(w);
+      tableCar=null;flowEvent('car-clear',cycle);
+      setStatus('table','空车末轮已过止挡，拔销提前返回');
+      await moveTablePin(false,cycle,'return');
+      await until(pushHeadClearOfTable);
+      flowEvent('table-return-start',cycle);tableMoving=true;
+      setStatus('table','空载返回重车线，与推车机并行');
+      const from=tt.position.z;
+      await tween(3.5,p=>tt.position.z=lerp(from,0,p));
+      tt.position.z=0;tableMoving=false;
+      setStatus('table','对准重车线，插销锁定');
+      await moveTablePin(true,cycle,'heavy');
+      tableReady=true;flowEvent('table-ready',cycle);
+      setStatus('table','已对准重车线，待接车',false);
     })(),
   ]);
-  tableReady = true;
 }
 
 // ================= 交互 =================
@@ -2096,6 +2216,7 @@ const views = {
   overview: { pos: [-56, 76, 104], tgt: [24, 0, -30] },
   dumper: { pos: [-13, 9, 17], tgt: [0, 1.5, 0] },
   positioner: { pos: [-30, 10, 22], tgt: [-8, 1.5, 1] },
+  uncoupler: { pos: [-27, 6, -8], tgt: [-21, 1.5, -1] },
   'heavy-grip': { pos: [HEAVY_GRIP_X + 3.4, 2.1, -5.1], tgt: [HEAVY_GRIP_X, .55, 0] },
   'empty-grip': { pos: [EMPTY_GRIP_X + 3.4, 2.1, EMPTY_Z + 5.1], tgt: [EMPTY_GRIP_X, .55, EMPTY_Z] },
   table: { pos: [44, 17, 14], tgt: [20, 0, -6] },
@@ -2187,6 +2308,27 @@ document.getElementById('loading').remove();
 mainLoop();
 // 支持 ?t=秒数 快进到指定仿真时刻（便于定位某一工序）
 const startupParams = new URLSearchParams(location.search);
+if(startupParams.has('qa')) {
+  paused=true;btnPlay.textContent='继续';
+  const snapshot=()=>({time:simTime,paused,cycle:cycleNumber,count:dumpCount,
+    speed,grips:{heavy:wheelGrippers.heavy.grip,empty:wheelGrippers.empty.grip,table:wheelGrippers.table.grip},
+    uncoupler:{...uncouplerState,base:uncouplerVisual.base?.toArray()},
+    positioner:posi.position.x,arm:posArm.rotation.x,angle:-rotor.rotation.x*180/Math.PI,
+    table:{z:tt.position.z,pin:tablePin,ready:tableReady,moving:tableMoving,car:tableCar?wagons.indexOf(tableCar):null},
+    pusher:{x:pusher.position.x,ready:pusherReady,stage:pusherStage},
+    stops:{heavy:stops.heavy.rotation.z,empty:stops.empty.rotation.z},
+    cars:wagons.filter(w=>w.g.visible).map(w=>({id:wagons.indexOf(w),position:w.g.getWorldPosition(new THREE.Vector3()).toArray(),load:w.load})),
+    loaded:loaded.map(w=>wagons.indexOf(w)),empties:empties.map(w=>wagons.indexOf(w)),events:[...overviewEvents],view:currentView,
+    statuses:Object.fromEntries([...document.querySelectorAll('#status-list .row')].map(row=>[row.id,row.querySelector('.state').textContent]))});
+  window.__overview={snapshot,
+    async advance(seconds){
+      const target=simTime+Math.max(0,Math.min(600,seconds));
+      while(simTime<target-1e-8){stepSim(Math.min(.02,target-simTime));for(let i=0;i<5;i++)await Promise.resolve();}
+      controls.update();renderer.render(scene,camera);labelRenderer.render(scene,camera);simtEl.textContent=simTime.toFixed(0);
+      return snapshot();
+    },
+    view:name=>moveToView(name,false)};
+}
 const ff = +startupParams.get('t') || 0;
 (async () => {
   while (simTime < ff) { stepSim(1 / 30); await new Promise(r => setTimeout(r, 0)); }
