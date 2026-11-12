@@ -9,6 +9,7 @@
 | --- | --- | --- |
 | 系统总览 | 翻卸、空车折返和料场煤流 | 在本地静态服务中打开 [index.html](index.html) |
 | 本体详解 | 点选部件、切换车皮、逐步观察翻卸 | 下载并双击 [dumper-detail.html](dumper-detail.html) |
+| 仿真操作 | 模拟真实操作 | 下载并双击 [dumper-operation.html](dumper-operation.html) |
 
 使用支持 WebGL 2 的浏览器。两份离线 HTML 已包含渲染依赖，下载后即可打开。
 
